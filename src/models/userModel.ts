@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-let Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 export const Users = new Schema(
   {
     name: {
@@ -16,7 +16,7 @@ export const Users = new Schema(
       required: false
     },
     loginType: {
-      type: String,
+      type: String
     },
     isActive: {
       type: Boolean,
@@ -31,7 +31,7 @@ export const Users = new Schema(
       default: Date.now
     },
     userId: {
-      type: String,
+      type: String
     }
   }
 );

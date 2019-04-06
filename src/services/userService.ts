@@ -14,26 +14,26 @@ import UserPayload from '../domain/requests/UserPayload';
  *
  * @returns {Promise<UserPayload[]>}
  */
-export async function fetchAll(searchKey:string): Promise<UserPayload[]> {
-  let users:any = await UserDao.fetchAll(searchKey);
+export async function fetchAll(searchKey: string): Promise<UserPayload[]> {
+  const users: any = await UserDao.fetchAll(searchKey);
 
   return users;
 }
 
-export async function create(user:UserPayload): Promise<UserPayload[]> {
-  let users:any = await UserDao.create(user)
+export async function create(user: UserPayload): Promise<UserPayload[]> {
+  const users: any = await UserDao.create(user)
 
   return users;
 }
 
-export async function update(id: string,user:UserPayload): Promise<UserPayload[]> {
-  let updateUser:any = await UserDao.update(id, user)
+export async function update(id: string, user: UserPayload): Promise<UserPayload[]> {
+  const updateUser: any = await UserDao.update(id, user)
 
   return updateUser;
 }
 
 export async function getById(id: string): Promise<UserPayload[]> {
-  let updateUser:any = await UserDao.getById(id)
+  const updateUser: any = await UserDao.getById(id)
 
   return updateUser;
 }

@@ -16,7 +16,7 @@ const { messages } = config;
  */
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
-    let searchKey = req.query.searchKey || '';
+    const searchKey = req.query.searchKey || '';
     const response = await userService.fetchAll(searchKey);
 
     res.status(HttpStatus.OK).json({
@@ -63,7 +63,7 @@ export async function update(req: Request, res: Response, next: NextFunction) {
   try {
     const userPayload = req.body as UserPayload;
 
-    const response = await userService.update(req.params.id,userPayload);
+    const response = await userService.update(req.params.id, userPayload);
 
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
