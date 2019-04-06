@@ -11,6 +11,9 @@ import * as userController from './controllers/user';
 
 const router: Router = Router();
 
+/**
+ * GET /
+ */
 router.get('/', homeController.index);
 
 // router.post('/login', validate.schema(loginSchema), authController.login);
@@ -18,6 +21,7 @@ router.get('/', homeController.index);
 // router.post('/logout', validateRefreshToken, authController.logout);
 
 router.get('/users', userController.getAll);
+router.get('/users/:id(\\d+)', userController.fetchById); //to only use this route if the ID is a numbe
 // router.post('/users', authenticate, validate.schema(userPOSTSchema), userController.store);
 
 export default router;
