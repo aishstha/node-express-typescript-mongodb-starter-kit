@@ -16,7 +16,8 @@ const { messages } = config;
  */
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
-    const response = await userService.fetchAll();
+    let searchKey = req.query.searchKey || '';
+    const response = await userService.fetchAll(searchKey);
 
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
@@ -28,25 +29,69 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-// /**
-//  * Controller to handle /users POST request.
-//  *
-//  * @param {Request} req
-//  * @param {Response} res
-//  * @param {NextFunction} next
-//  */
-// export async function store(req: Request, res: Response, next: NextFunction) {
-//   try {
-//     const userPayload = req.body as UserPayload;
+/**
+ * Controller to handle /users POST request.
+ *
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ */
+export async function create(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userPayload = req.body as UserPayload;
 
-//     const response = await userService.insert(userPayload);
+    const response = await userService.create(userPayload);
 
-//     res.status(HttpStatus.OK).json({
-//       code: HttpStatus.OK,
-//       data: response,
-//       message: messages.users.insert
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// }
+    res.status(HttpStatus.OK).json({
+      code: HttpStatus.OK,
+      data: response,
+      message: messages.users.insert
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * Controller to handle /users POST request.
+ *
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ */
+export async function update(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userPayload = req.body as UserPayload;
+
+    const response = await userService.update(req.params.id,userPayload);
+
+    res.status(HttpStatus.OK).json({
+      code: HttpStatus.OK,
+      data: response,
+      message: messages.users.insert
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * Controller to handle /users POST request.
+ *
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ */
+export async function getById(req: Request, res: Response, next: NextFunction) {
+  try {
+    const response = await userService.getById(req.params.id);
+
+    res.status(HttpStatus.OK).json({
+      code: HttpStatus.OK,
+      data: response,
+      message: messages.users.insert
+    });
+  } catch (err) {
+    next(err);
+  }
+}

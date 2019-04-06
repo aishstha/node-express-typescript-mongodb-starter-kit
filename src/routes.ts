@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
 // import * as validate from './middlewares/validate';
-import * as homeController from './controllers/home';
-import * as userController from './controllers/user';
+// import * as homeController from './controllers/home';
+import user from './routes/user'
 // import * as authController from './controllers/auth';
 // import authenticate from './middlewares/authenticate';
 // import { loginSchema } from './validators/loginRequest';
@@ -11,13 +11,21 @@ import * as userController from './controllers/user';
 
 const router: Router = Router();
 
-router.get('/', homeController.index);
+router.get('/', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.json({name: req.app.locals.name,
+    version: req.app.locals.version});
+});
 
 // router.post('/login', validate.schema(loginSchema), authController.login);
 // router.post('/refresh', validateRefreshToken, authController.refresh);
 // router.post('/logout', validateRefreshToken, authController.logout);
 
-router.get('/users', userController.getAll);
-// router.post('/users', authenticate, validate.schema(userPOSTSchema), userController.store);
+router.use('/users', user);
+
+// router.get('/users', userController.getAll);
+// router.post('/users', userController.create);
+// router.put('/users/:id', userController.update);
+// router.get('/users/:id', userController.getById);
 
 export default router;

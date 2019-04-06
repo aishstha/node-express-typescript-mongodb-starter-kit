@@ -7,17 +7,16 @@ export const Users = new Schema(
       type: String,
       required: true
     },
-    gender: {
+    password: {
       type: String,
       required: false
     },
-    address: {
+    email: {
       type: String,
       required: false
     },
     loginType: {
       type: String,
-      required: false
     },
     isActive: {
       type: Boolean,
@@ -33,19 +32,8 @@ export const Users = new Schema(
     },
     userId: {
       type: String,
-      required: true
     }
   }
 );
-
-Users.statics = {
-  fetchAll() {
-    return this.find()
-      .exec()
-      .then((res:any) => {
-        return res;
-      });
-  }
-};
 
 module.exports = exports = mongoose.model('users', Users); 
