@@ -3,6 +3,7 @@ import { Router } from 'express';
 // import * as validate from './middlewares/validate';
 // import * as homeController from './controllers/home';
 import user from './routes/user'
+import post from './routes/post'
 // import * as authController from './controllers/auth';
 // import authenticate from './middlewares/authenticate';
 // import { loginSchema } from './validators/loginRequest';
@@ -22,6 +23,7 @@ router.get('/', (req, res) => {
 // router.post('/logout', validateRefreshToken, authController.logout);
 
 router.use('/users', user);
+router.use('/posts', post);
 
 // router.get('/users', userController.getAll);
 // router.post('/users', userController.create);

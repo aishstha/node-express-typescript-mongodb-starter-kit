@@ -31,7 +31,7 @@ export function update(id: any , user: object){
   });
 }
 
-export function getById(id: any , user: object){
+export function getById(id: any){
   return new Promise((resolve, reject) => {
     User.findById(id)
     .then((user: any) => resolve(user))
