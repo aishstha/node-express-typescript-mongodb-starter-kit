@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
-export const Posts = new Schema(
+const Posts = new Schema(
   {
     title: {
       type: String,

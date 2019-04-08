@@ -4,6 +4,7 @@ import { Router } from 'express';
 // import * as homeController from './controllers/home';
 import user from './routes/user'
 import post from './routes/post'
+import comment from './routes/comment'
 // import * as authController from './controllers/auth';
 // import authenticate from './middlewares/authenticate';
 // import { loginSchema } from './validators/loginRequest';
@@ -24,6 +25,7 @@ router.get('/', (req, res) => {
 
 router.use('/users', user);
 router.use('/posts', post);
+router.use('/comments', comment)
 
 // router.get('/users', userController.getAll);
 // router.post('/users', userController.create);

@@ -7,7 +7,7 @@ export async function create(post: PostPayload): Promise<PostPayload[]> {
   return posts;
 }
 
-export async function getById(id: string): Promise<PostPayload[]> {
+export async function getById(id: string): Promise<any[]> {
   const updateUser: any = await PostDao.getById(id)
 
   return updateUser;
