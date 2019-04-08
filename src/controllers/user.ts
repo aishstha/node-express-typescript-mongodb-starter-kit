@@ -3,7 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 
 import config from '../config/config';
 import * as userService from '../services/userService';
+import * as authService from '../services/authService';
 import UserPayload from '../domain/requests/UserPayload';
+import LoginPayload from '../domain/requests/LoginPayload';
 
 const { messages } = config;
 
@@ -38,9 +40,22 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
  */
 export async function create(req: Request, res: Response, next: NextFunction) {
   try {
-    const userPayload = req.body as UserPayload;
+    const userPayload = req.body as LoginPayload;
+    console.log("the payload is ", req.body)
+    let payload = await authService.verifyGoogleAccount(userPayload.token);
+    let user = await userService.findByGoogleId(payload.userId)
 
-    const response = await userService.create(userPayload);
+    if(user.length)
+      throw new Error("User already existed")
+
+    let newUser = {
+      name: payload.name,
+      email: payload.email,
+      userId: payload.userId,
+      image: payload.imageUrl
+    }
+
+    const response = await userService.create(newUser);
 
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,

@@ -38,3 +38,11 @@ export function getById(id: any){
     .catch((err: any) => reject(err));
   });
 }
+
+export function findByGoogleId(id: any){
+  return new Promise((resolve, reject) => {
+    User.find({userId: id})
+    .then((user: any) => resolve(user))
+    .catch((err: any) => reject(err));
+  });
+}

@@ -3,6 +3,7 @@ import { Router } from 'express';
 // import * as validate from './middlewares/validate';
 // import * as homeController from './controllers/home';
 import user from './routes/user'
+import auth from './routes/auth'
 import post from './routes/post'
 import comment from './routes/comment'
 // import * as authController from './controllers/auth';
@@ -23,6 +24,7 @@ router.get('/', (req, res) => {
 // router.post('/refresh', validateRefreshToken, authController.refresh);
 // router.post('/logout', validateRefreshToken, authController.logout);
 
+router.use('/auth', auth);
 router.use('/users', user);
 router.use('/posts', post);
 router.use('/comments', comment)

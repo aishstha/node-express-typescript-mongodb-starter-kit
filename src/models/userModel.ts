@@ -7,20 +7,9 @@ export const Users = new Schema(
       type: String,
       required: true
     },
-    password: {
-      type: String,
-      required: false
-    },
     email: {
       type: String,
       required: false
-    },
-    loginType: {
-      type: String
-    },
-    isActive: {
-      type: Boolean,
-      default: true
     },
     createdAt: {
       type: Date,
@@ -31,6 +20,9 @@ export const Users = new Schema(
       default: Date.now
     },
     userId: {
+      type: String
+    },
+    image:{
       type: String
     }
   }
