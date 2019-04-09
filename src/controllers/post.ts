@@ -18,7 +18,7 @@ export async function create(req: Request, res: Response, next: NextFunction) {
   try {
     const postPayload = req.body as PostPayload;
 
-    const response = await postService.create(postPayload);
+    const response = await postService.create(res.locals.loggedInPayload.id, postPayload);
 
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
@@ -39,18 +39,16 @@ export async function create(req: Request, res: Response, next: NextFunction) {
  */
 export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
-    let post = await postService.getById(req.params.id);
-    let comments = await commentService.findByPostId(req.params.id);
+    const post = await postService.getById(req.params.id);
+    const comments = await commentService.findByPostId(req.params.id);
 
-    let response= {
+    const response = {
       id: post._id,
       title: post.title,
       description: post.description,
       user: post.users,
-      comments: comments
+      comments
     }
-
-    console.log("the comment are ", comments)
 
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,

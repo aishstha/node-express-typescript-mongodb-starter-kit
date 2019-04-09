@@ -5,6 +5,9 @@ import * as authService from '../services/authService';
 import * as userService from '../services/userService';
 import LoginPayload from '../domain/requests/LoginPayload';
 
+import config from '../config/config';
+import BadRequestError from '../exceptions/BadRequestError';
+
 /**
  * Controller to handle /posts POST request.
  *
@@ -14,23 +17,35 @@ import LoginPayload from '../domain/requests/LoginPayload';
  */
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
+    if(!req.body.token)
+      throw new BadRequestError(config.ERROR_MESSAGE.TOKEN_REQUIRED);
+    
     const loginPayload = req.body as LoginPayload;
-
-    let payload = await authService.verifyGoogleAccount(loginPayload.token);
+    const payload = await authService.verifyGoogleAccount(loginPayload.token);
     let user = await userService.findByGoogleId(payload.userId)
 
-    if(!user.length)
-      throw new Error('No user found');
+    if (!user.length) {
+      const newUser = {
+        name: payload.name,
+        email: payload.email,
+        userId: payload.userId,
+        image: payload.imageUrl
+      }
+  
+      user = await userService.create(newUser);
+    }
 
-    let tokenData = {id: user[0]._id};
+    const tokenData = {id: user[0]._id};
 
-    let accessToken = utilService.generateAccessToken(tokenData);
-    let refreshToken = utilService.generateRefreshToken(tokenData);
+    const accessToken = utilService.generateAccessToken(tokenData);
+    const refreshToken = utilService.generateRefreshToken(tokenData);
 
-    let response = {
-      name: user[0].name,
-      email: user[0].email,
-      image: user[0].image,
+    user = await userService.updateRefreshToken(user, refreshToken)
+
+    const response = {
+      name: user.name,
+      email: user.email,
+      image: user.image,
       accessToken,
       refreshToken
     }
@@ -43,5 +58,57 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     });
   } catch (err) {
     next(err);
+  }
+}
+
+/**
+ * Handle /refresh request.
+ *
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ */
+export async function getAccesstoken(req: Request, res: Response, next: NextFunction) {
+  try {
+    const tokenData = {id: res.locals.loggedInPayload.id};
+    
+    const accessToken = utilService.generateAccessToken(tokenData);
+
+    res.status(HttpStatus.OK).json({
+      accessToken,
+      code: HttpStatus.OK,
+      message: "genereated"
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Handle /refresh request.
+ *
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ */
+export async function logout(req: Request, res: Response, next: NextFunction) {
+  try {
+    const token = req.body.refreshToken
+    let user = await userService.findUserDetail(res.locals.loggedInPayload.id);
+    console.log("user ", user)
+    if(user){
+      console.log("user", user);
+
+      await userService.removeSession(user, token)
+    }
+    let response=[];
+
+    res.status(HttpStatus.OK).json({
+      response,
+      code: HttpStatus.OK,
+      message: "genereated"
+    });
+  } catch (error) {
+    next(error);
   }
 }

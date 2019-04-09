@@ -1,15 +1,15 @@
 import Comment from '../models/commentModel';
 import CommentPayload from '../domain/requests/CommentPayload';
 
-export function create(comment: CommentPayload, postId: any){
+export function create(comment: CommentPayload, postId: any, userId:any){
   return new Promise((resolve, reject) => {
-    let buildComment = {
+    const buildComment = {
       description: comment.description || '',
       posts: {
-        "_id": postId
+        '_id': postId
       },
       users: {
-        "_id": "5ca8b91e9aaedf1052da6205"
+        '_id': userId
       }
     }
     const CommentModel = new Comment(buildComment)
@@ -23,7 +23,7 @@ export function findByPostId(postId: string){
   return new Promise((resolve, reject) => {
     let option = {}
     if (!postId) {
-      throw new Error("pass post id please")
+      throw new Error('pass post id please')
     }
     option = {
       posts: postId
@@ -39,33 +39,31 @@ export function findByPostId(postId: string){
   });
 }
 
-export function createSubComment(subComment: CommentPayload, commentId: any){
+export function createSubComment(subComment: CommentPayload, commentId: any, userId:any){
   return new Promise((resolve, reject) => {
-    let sub_comment = {
+    const sub_comment = {
       description: subComment.description || '',
       users: {
-        "_id": "5ca8b91e9aaedf1052da6205"
+        '_id': userId
       }
     }
 
     Comment.findOneAndUpdate(
-      {"_id": commentId}, 
+      {'_id': commentId}, 
       {$push: {sub_comments: sub_comment}})
-      .then((comment:any) =>resolve(comment))
+      .then((comment: any) => resolve(comment))
       .catch((err: any) => reject(err));
   });
 }
 
-export function updateSubComment(subComment: CommentPayload, commentId: any, subCommentId:any){
+export function updateSubComment(subComment: CommentPayload, commentId: any, subCommentId: any){
   return new Promise((resolve, reject) => {
 
     Comment.findById(commentId)
-      .then((comment:any) =>{
-        let subDoc = comment.sub_comments.id(subCommentId);
-        subDoc.set({"description": subComment.description || ''});
+      .then((comment: any) => {
+        const subDoc = comment.sub_comments.id(subCommentId);
+        subDoc.set({'description': subComment.description || ''});
 
-        console.log("the description is ", subDoc)
-        
         comment.save().then(function(savedComment: any) {
           resolve(savedComment)
         }).catch(function(err: any) {

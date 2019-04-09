@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-var childSchema = new Schema({ description: {
+let childSchema = new Schema({ description: {
   type: String,
   required: true
 },

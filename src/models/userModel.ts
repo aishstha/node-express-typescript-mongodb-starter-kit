@@ -22,8 +22,11 @@ export const Users = new Schema(
     userId: {
       type: String
     },
-    image:{
+    image: {
       type: String
+    },
+    refreshToken: {
+      type: Array
     }
   }
 );

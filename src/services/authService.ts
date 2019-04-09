@@ -1,10 +1,11 @@
 // const { OAuth2Client } = require('google-auth-library');
 
 import config from '../config/config';
-import {OAuth2Client} from 'google-auth-library';
+import { OAuth2Client } from 'google-auth-library';
+import UnauthorizedError from '../exceptions/UnauthorizedError';
 
-export async function verifyGoogleAccount(token:any) {
-  let client = new OAuth2Client(config.googleClientId, '', '');
+export async function verifyGoogleAccount(token: any) {
+  const client = new OAuth2Client(config.googleClientId, '', '');
 
   return new Promise((resolve, reject) => {
     if (!token) {
@@ -13,8 +14,8 @@ export async function verifyGoogleAccount(token:any) {
 
     client
       .verifyIdToken({ idToken: token, audiance: config.googleClientId })
-      .then((login:any) => {
-        let payload = login.getPayload();
+      .then((login: any) => {
+        const payload = login.getPayload();
 
         if (payload['aud'] === config.googleClientId) {
           resolve({
@@ -24,10 +25,10 @@ export async function verifyGoogleAccount(token:any) {
             imageUrl: payload.picture
           })
         }
-        else
-          throw new Error('authorication')
+        else {
+          throw new UnauthorizedError(config.ERROR_MESSAGE.INVALID_GOOGLE_CLIENT_ID);
+        }
       })
-      .catch((err:any) => reject(err));
+      .catch((err: any) => reject(err));
   });
 }
-

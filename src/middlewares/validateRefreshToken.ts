@@ -31,8 +31,8 @@ async function validateRefreshToken(req: Request, res: Response, next: NextFunct
 
     logger.debug('JWT: Verifying token - ', res.locals.refreshToken);
     const response: any = jwt.verifyRefreshToken(res.locals.refreshToken);
-    res.locals.jwtPayload = response.encryptedData;
-    logger.debug('JWT: Authentication verified - ', JSON.stringify(res.locals.jwtPayload, null, 2));
+    res.locals.loggedInPayload = response;
+    logger.debug('JWT: Authentication verified - ', JSON.stringify(res.locals.loggedInPayload, null, 2));
 
     next();
   } catch (err) {

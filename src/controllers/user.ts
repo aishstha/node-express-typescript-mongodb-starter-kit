@@ -41,14 +41,14 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
 export async function create(req: Request, res: Response, next: NextFunction) {
   try {
     const userPayload = req.body as LoginPayload;
-    console.log("the payload is ", req.body)
-    let payload = await authService.verifyGoogleAccount(userPayload.token);
-    let user = await userService.findByGoogleId(payload.userId)
+    const payload = await authService.verifyGoogleAccount(userPayload.token);
+    const user = await userService.findByGoogleId(payload.userId)
 
-    if(user.length)
-      throw new Error("User already existed")
+    if (user.length) {
+      throw new Error('User already existed')
+    }
 
-    let newUser = {
+    const newUser = {
       name: payload.name,
       email: payload.email,
       userId: payload.userId,
@@ -78,7 +78,7 @@ export async function update(req: Request, res: Response, next: NextFunction) {
   try {
     const userPayload = req.body as UserPayload;
 
-    const response = await userService.update(req.params.id, userPayload);
+    const response = await userService.update(res.locals.loggedInPayload.id, userPayload);
 
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
@@ -100,6 +100,27 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
     const response = await userService.getById(req.params.id);
+
+    res.status(HttpStatus.OK).json({
+      code: HttpStatus.OK,
+      data: response,
+      message: messages.users.insert
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * Controller to handle /users POST request.
+ *
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ */
+export async function getUserDetail(req: Request, res: Response, next: NextFunction) {
+  try {
+    const response = await userService.getById(res.locals.loggedInPayload.id);
 
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
