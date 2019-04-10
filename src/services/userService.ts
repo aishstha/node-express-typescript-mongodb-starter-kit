@@ -56,10 +56,10 @@ export async function findUserDetail(id: string): Promise<UserPayload[]> {
   return updateUser;
 }
 
-export async function removeSession(user: UserPayload, token:string): Promise<UserPayload[]> {
-  let index = user.refreshToken.indexOf(token);
-  if(index>-1){
-    user.refreshToken = user.refreshToken.splice(index,1)
+export async function removeSession(user: UserPayload, token: string): Promise<UserPayload[]> {
+  const index = user.refreshToken.indexOf(token);
+  if (index > -1){
+    user.refreshToken = user.refreshToken.splice(index, 1)
     
     const updateUser: any = await UserDao.update(user._id, user)
   }

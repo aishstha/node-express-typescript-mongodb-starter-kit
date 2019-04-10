@@ -7,7 +7,7 @@ import * as commentController from '../controllers/comment'
 const router: Router = Router();
 
 router.get('/', postController.getAll);
-router.post('/',authenticate, postController.create);
+router.post('/', authenticate, postController.create);
 // router.put('/:id', userController.update);
 router.get('/:id', postController.getById);
 router.post('/:postId/comments', authenticate, commentController.create)

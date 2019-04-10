@@ -1,7 +1,7 @@
 import * as PostDao from '../daos/post';
 import PostPayload from '../domain/requests/PostPayload';
 
-export async function create(userId:any, post: PostPayload): Promise<PostPayload[]> {
+export async function create(userId: any, post: PostPayload): Promise<PostPayload[]> {
   post.users = {
     _id: userId
   }

@@ -1,4 +1,6 @@
 import * as CommentDao from '../daos/comment';
+import config from '../config/config';
+import UnauthorizedError from '../exceptions/UnauthorizedError';
 import CommentPayload from '../domain/requests/CommentPayload';
 
 export async function create(comment: CommentPayload, postId: any, userId: any): Promise<CommentPayload[]> {
@@ -26,7 +28,7 @@ export async function findByPostId(postId: any): Promise<CommentPayload[]> {
 //   });
 // }
 
-export async function createSubComment(subComment: CommentPayload, commentId: any, userId:any): Promise<CommentPayload[]> {
+export async function createSubComment(subComment: CommentPayload, commentId: any, userId: any): Promise<CommentPayload[]> {
   const newComment: any = await CommentDao.createSubComment(subComment, commentId, userId)
 
   return newComment;
@@ -34,6 +36,26 @@ export async function createSubComment(subComment: CommentPayload, commentId: an
 
 export async function updateSubComment(subComment: CommentPayload, commentId: any, subCommentId: any): Promise<CommentPayload[]> {
   const newComment: any = await CommentDao.updateSubComment(subComment, commentId, subCommentId)
+
+  return newComment;
+}
+
+export async function update(id: string, comment: CommentPayload, currentUserId: any): Promise<CommentPayload[]> {
+  const fetchComment: any = await CommentDao.getById(id);
+  if(fetchComment.users !== currentUserId){
+    throw new UnauthorizedError(config.ERROR_MESSAGE.INVALID_ACTION);
+
+    return;
+  }
+
+  console.log("eta ayo")
+  const updateComment: any = await CommentDao.update(id, {description: comment.description})
+
+  return updateComment;
+}
+
+export async function removeSubComment(commentId: any, userId: any): Promise<CommentPayload[]> {
+  const newComment: any = await CommentDao.removeSubComment(commentId, userId)
 
   return newComment;
 }

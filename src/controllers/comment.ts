@@ -73,3 +73,47 @@ export async function createSubComment(req: Request, res: Response, next: NextFu
     next(err);
   }
 }
+
+/**
+ * Controller to handle /users POST request.
+ *
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ */
+export async function update(req: Request, res: Response, next: NextFunction) {
+  try {
+    const commentPayload = req.body as CommentPayload;
+
+    const response = await commentService.update(req.params.id, commentPayload, res.locals.loggedInPayload.id);
+
+    res.status(HttpStatus.OK).json({
+      code: HttpStatus.OK,
+      data: response,
+      message: 'abc'
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * Controller to handle /posts POST request.
+ *
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ */
+export async function removeSubComment(req: Request, res: Response, next: NextFunction) {
+  try {
+    const response = await commentService.removeSubComment(req.params.id, req.params.subCommentId);
+
+    res.status(HttpStatus.OK).json({
+      code: HttpStatus.OK,
+      data: response,
+      message: 'created'
+    });
+  } catch (err) {
+    next(err);
+  }
+}
