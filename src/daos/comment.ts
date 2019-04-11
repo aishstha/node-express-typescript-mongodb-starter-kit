@@ -1,4 +1,6 @@
 import Comment from '../models/commentModel';
+import config from '../config/config';
+import UnauthorizedError from '../exceptions/UnauthorizedError';
 import CommentPayload from '../domain/requests/CommentPayload';
 
 export function create(comment: CommentPayload, postId: any, userId: any){
@@ -56,12 +58,17 @@ export function createSubComment(subComment: CommentPayload, commentId: any, use
   });
 }
 
-export function updateSubComment(subComment: CommentPayload, commentId: any, subCommentId: any){
+export function updateSubComment(subComment: CommentPayload, commentId: any, subCommentId: any, currentUserId:any){
   return new Promise((resolve, reject) => {
 
     Comment.findById(commentId)
       .then((comment: any) => {
         const subDoc = comment.sub_comments.id(subCommentId);
+
+        if(subDoc.users.toString() !== currentUserId)
+          throw new UnauthorizedError(config.ERROR_MESSAGE.INVALID_ACTION);
+
+        console.log(subDoc)
         subDoc.set({'description': subComment.description || ''});
 
         comment.save().then(function(savedComment: any) {

@@ -39,7 +39,7 @@ export async function editSubComment(req: Request, res: Response, next: NextFunc
   try {
     const subCommentPayload = req.body as CommentPayload;
 
-    const response = await commentService.updateSubComment(subCommentPayload, req.params.id, req.params.subCommentId);
+    const response = await commentService.updateSubComment(subCommentPayload, req.params.id, req.params.subCommentId, res.locals.loggedInPayload.id);
 
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
